@@ -5,7 +5,7 @@ import kakao from '@assets/images/ico-user-kakao.png';
 import './snsShare.scss';
 
 export default function SnsShare() {
-  const link = 'http://www.naver.com';
+  const link = 'http://me.go.kr/home/web/main.do'; //페이스북, 네이버는 localhost연결이 안돼서 네이버로 설정해둠
   const link2 = 'http://localhost:3000/main';
 
   const snsLists = [
@@ -42,10 +42,6 @@ export default function SnsShare() {
 
   //kakao
   const shareKakao = () => {
-    if (window.Kakao === undefined) {
-      return;
-    }
-
     if (window.Kakao) {
       //카카오 스크립트가 로드된 경우
       const kakao = window.Kakao;
@@ -101,6 +97,25 @@ export default function SnsShare() {
     return () => document.body.removeChild(script);
   }, []);
 
+  //kakao 채널추가
+  const chatKakao = () => {
+    if (window.Kakao) {
+      const kakao = window.Kakao;
+
+      //인증이 안되어있는 경우 인증한다.
+      if (!kakao.isInitialized()) {
+        kakao.init(process.env.REACT_APP_SHARE_KAKAO_LINK_KEY); // 카카오에서 제공받은 javascript key를 넣어줌 -> .env파일에서 호출시킴
+      }
+
+      kakao.Channel.createAddChannelButton({
+        container: '#kakao-talk-channel-add-button',
+        channelPublicId: '_ZeUTxl',
+        size: 'small',
+        supportMultipleDensities: true,
+      });
+    }
+  };
+
   return (
     <div className='snsShareContainer'>
       {snsLists.map((item, i) => (
@@ -120,6 +135,16 @@ export default function SnsShare() {
           <img className='shareicon' src={item.src} alt={`${item.name} logo`} />
         </button>
       ))}
+
+      <div
+        onClick={chatKakao}
+        id='kakao-talk-channel-add-button'
+        data-channel-public-id='_ZeUTxl'
+        data-size='small'
+        data-support-multiple-densities='true'
+      >
+        ss
+      </div>
     </div>
   );
 }
