@@ -3,9 +3,10 @@ import facebook from '@assets/images/ico-user_facebook.png';
 import naver from '@assets/images/naver.png';
 import kakao from '@assets/images/ico-user-kakao.png';
 import './snsShare.scss';
+import KakaoChannelBtn from './KakaoChannelBtn';
 
 export default function SnsShare() {
-  const link = 'http://me.go.kr/home/web/main.do'; //페이스북, 네이버는 localhost연결이 안돼서 네이버로 설정해둠
+  const link1 = 'https://www.naver.com/'; //페이스북, 네이버는 localhost연결이 안돼서 네이버로 설정해둠
   const link2 = 'http://localhost:3000/main';
 
   const snsLists = [
@@ -27,7 +28,7 @@ export default function SnsShare() {
   //faceBook
   const shareFaceBook = () => {
     window.open(
-      `https://www.facebook.com/sharer/sharer.php?u=${link}`,
+      `https://www.facebook.com/sharer/sharer.php?u=${link1}`,
       '페이스북 공유하기',
       'width=600,height=800,location=no,status=no,scrollbars=yes'
     );
@@ -36,7 +37,7 @@ export default function SnsShare() {
   //naver
   const shareNaver = () => {
     window.open(
-      `https://share.naver.com/web/shareView?url=${link}&title=네이버 공유하기`
+      `https://share.naver.com/web/shareView?url=${link1}&title=네이버 공유하기`
     );
   };
 
@@ -91,40 +92,15 @@ export default function SnsShare() {
   //kakao
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-    script.async = true;
-
-    window.onload = () => chatKakao(script); //처음 호출되도록 설정
-
-    document.body.appendChild(script);
-    return () => document.body.removeChild(script);
+    script.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js'; //script 실행 src
+    script.async = true; //다운완료시 바로 실행
+    document.body.appendChild(script); //태그 생성 (크롬에서 확인 가능)
+    return () => document.body.removeChild(script); //계속 생기지 않게 중단
   }, []);
-
-  //kakao 채널추가
-  /* useEffect(() => chatKakao, []); */
-  const chatKakao = (script) => {
-    const kakao = window.Kakao;
-
-    if (window.Kakao) {
-      //인증이 안되어있는 경우 인증한다.
-      if (!kakao.isInitialized()) {
-        kakao.init(process.env.REACT_APP_SHARE_KAKAO_LINK_KEY); // 카카오에서 제공받은 javascript key를 넣어줌 -> .env파일에서 호출시킴
-      }
-
-      kakao.Channel.createAddChannelButton({
-        container: '#kakao-talk-channel-add-button',
-        channelPublicId: '_ZeUTxl', //카카오 채널 ID
-        size: 'small',
-        supportMultipleDensities: true,
-      });
-
-      document.body.appendChild(script);
-      return () => document.body.removeChild(script);
-    }
-  };
 
   return (
     <div className='snsShareContainer'>
+      {/* SNS 공유하기(faceBook,naver,kakao) */}
       {snsLists.map((item, i) => (
         <button
           className='share-wrapper'
@@ -143,8 +119,8 @@ export default function SnsShare() {
         </button>
       ))}
 
-      <div id='kakao-talk-channel-add-button'></div>
-      {/*  <div id='kakao-talk-channel-add-button'></div> */}
+      {/* kakao 채널 추가 */}
+      <KakaoChannelBtn />
     </div>
   );
 }

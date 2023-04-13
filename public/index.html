@@ -29,11 +29,14 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!-- kakao 채널추가 -->
-    <!--   <script
+    <!-- kakao 채널추가 (SnsShare에서 useEffect로 안불러올시 여기서 불러오면 됨) -->
+    <!--  <script
       src="https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js"
       integrity="sha384-dpu02ieKC6NUeKFoGMOKz6102CLEWi9+5RQjWSV0ikYSFFd8M3Wp2reIcquJOemx"
       crossorigin="anonymous"
-    ></script> -->
+    ></script>
+    <script>
+      Kakao.init(process.env.REACT_APP_SHARE_KAKAO_LINK_KEY); // 사용하려는 앱의 JavaScript 키 입력
+    </script> -->
   </body>
 </html>
