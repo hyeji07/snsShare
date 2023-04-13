@@ -94,7 +94,7 @@ export default function SnsShare() {
     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
     script.async = true;
 
-    script.onload = () => chatKakao();
+    window.onload = () => chatKakao(script); //처음 호출되도록 설정
 
     document.body.appendChild(script);
     return () => document.body.removeChild(script);
@@ -102,7 +102,7 @@ export default function SnsShare() {
 
   //kakao 채널추가
   /* useEffect(() => chatKakao, []); */
-  const chatKakao = () => {
+  const chatKakao = (script) => {
     const kakao = window.Kakao;
 
     if (window.Kakao) {
@@ -113,10 +113,13 @@ export default function SnsShare() {
 
       kakao.Channel.createAddChannelButton({
         container: '#kakao-talk-channel-add-button',
-        channelPublicId: '_ZeUTxl',
+        channelPublicId: '_ZeUTxl', //카카오 채널 ID
         size: 'small',
         supportMultipleDensities: true,
       });
+
+      document.body.appendChild(script);
+      return () => document.body.removeChild(script);
     }
   };
 
@@ -140,7 +143,7 @@ export default function SnsShare() {
         </button>
       ))}
 
-      <div id='kakao-talk-channel-add-button' /* onClick={chatKakao} */>ss</div>
+      <div id='kakao-talk-channel-add-button'></div>
       {/*  <div id='kakao-talk-channel-add-button'></div> */}
     </div>
   );
