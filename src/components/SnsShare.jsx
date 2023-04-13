@@ -93,15 +93,19 @@ export default function SnsShare() {
     const script = document.createElement('script');
     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
     script.async = true;
+
+    script.onload = () => chatKakao();
+
     document.body.appendChild(script);
     return () => document.body.removeChild(script);
   }, []);
 
   //kakao 채널추가
+  /* useEffect(() => chatKakao, []); */
   const chatKakao = () => {
-    if (window.Kakao) {
-      const kakao = window.Kakao;
+    const kakao = window.Kakao;
 
+    if (window.Kakao) {
       //인증이 안되어있는 경우 인증한다.
       if (!kakao.isInitialized()) {
         kakao.init(process.env.REACT_APP_SHARE_KAKAO_LINK_KEY); // 카카오에서 제공받은 javascript key를 넣어줌 -> .env파일에서 호출시킴
@@ -136,15 +140,8 @@ export default function SnsShare() {
         </button>
       ))}
 
-      <div
-        onClick={chatKakao}
-        id='kakao-talk-channel-add-button'
-        data-channel-public-id='_ZeUTxl'
-        data-size='small'
-        data-support-multiple-densities='true'
-      >
-        ss
-      </div>
+      <div id='kakao-talk-channel-add-button' /* onClick={chatKakao} */>ss</div>
+      {/*  <div id='kakao-talk-channel-add-button'></div> */}
     </div>
   );
 }
