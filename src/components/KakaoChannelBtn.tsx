@@ -32,6 +32,16 @@ export default function KakaoChannelBtn() {
 
   //2.
   const addKakaoChannel = () => {
+    //카카오 스크립트가 로드된 경우
+    const kakao = window.Kakao;
+
+    kakao.Channel.addChannel({
+      channelPublicId: '_ZeUTxl', //카카오 채널 ID
+    });
+  };
+
+  //원래는 아래 코드였으나 SnsShare.jsx 에서 이미 SDK 불러와서 위 코드로 사용함
+  /* const addKakaoChannel = () => {
     if (window.Kakao) {
       //카카오 스크립트가 로드된 경우
       const kakao = window.Kakao;
@@ -45,17 +55,35 @@ export default function KakaoChannelBtn() {
         channelPublicId: '_ZeUTxl', //카카오 채널 ID
       });
     }
-  };
+  }; */
 
-  /* **SnsShare.jsx 에서 이미 SDK 불러와서 주석처리(만약 이 컴포넌트 개별 작동시엔 써야함=>public>index.html에서 이미 SDK있는 경우는 X)
-  //kakao
+  /* **SnsShare.jsx 에서 이미 SDK 불러와서 주석처리(만약 이 컴포넌트 개별 
+   //kakao
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.1.0/kakao.min.js'; //script 실행 src
     script.async = true; //다운완료시 바로 실행
     document.body.appendChild(script); //태그 생성 (크롬에서 확인 가능)
-    return () => document.body.removeChild(script); //계속 생기지 않게 중단
-  }, []); */
+
+    script.onerror = () => console.error('Failed to load Kakao SDK'); //스크립트 로드 실패 시 에러 메시지 출력
+
+    // 스크립트 로딩이 완료될 때 수행할 로직 (첫번째 인자인 load event는 정해져있는 것 꺼내씀/ 두번째 인자는 실행시키는 함수)
+    script.addEventListener('load', () => {
+      // Kakao SDK 로딩 완료 후 수행할 작업
+      window.Kakao.init(process.env.REACT_APP_SHARE_KAKAO_LINK_KEY);
+    });
+
+    // useEffect 함수의 반환값으로 이벤트 리스너를 제거하는 함수를 반환
+    return () => {
+      document.body.removeChild(script);
+      script.removeEventListener('load', () => {
+        // Kakao SDK 로딩 완료 후 수행할 작업
+        window.Kakao.init(process.env.REACT_APP_SHARE_KAKAO_LINK_KEY);
+      });
+    };
+  }, []);
+  
+    */
 
   return (
     <>
