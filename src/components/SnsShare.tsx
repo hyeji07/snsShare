@@ -5,11 +5,16 @@ import kakao from '@assets/images/ico-user-kakao.png';
 import './snsShare.scss';
 import KakaoChannelBtn from './KakaoChannelBtn';
 
+interface SnsList {
+  name: string;
+  src: string;
+}
+
 export default function SnsShare() {
   const link1 = 'https://www.naver.com/'; //페이스북, 네이버는 localhost연결이 안돼서 네이버로 설정해둠
   const link2 = 'http://localhost:3000/main';
 
-  const snsLists = [
+  const snsLists: SnsList[] = [
     {
       name: 'faceBook',
       src: facebook,
